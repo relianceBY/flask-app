@@ -1,10 +1,8 @@
 from flask import Flask, request, Response
 from viberbot import Api
 from viberbot.api.bot_configuration import BotConfiguration
-from viberbot.api.messages import (
-    TextMessage,
-    KeyboardMessage 
-)
+from viberbot.api.messages.text_message import TextMessage
+from viberbot.api.messages.url_message import URLMessage
 from viberbot.api.viber_requests import ViberConversationStartedRequest
 from viberbot.api.viber_requests import ViberFailedRequest
 from viberbot.api.viber_requests import ViberMessageRequest
@@ -18,6 +16,7 @@ import threading
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
+
 handler = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
@@ -41,9 +40,16 @@ def incoming():
         viber.send_messages(viber_request.sender.id, [
             message
         ])
-    elif isinstance(viber_request, ViberConversationStartedRequest) \
-            or isinstance(viber_request, ViberSubscribedRequest) \
-            or isinstance(viber_request, ViberUnsubscribedRequest):
+
+    elif isinstance(viber_request, ViberSubscribedRequest):
+        viber.send_messages(viber_request.user.id, [
+            TextMessage(text="thanks for subscribing!")
+        ])
+
+    elif isinstance(viber_request, ViberFailedRequest):
+        logger.warn("client failed receiving message. failure: {0}".format(viber_request))
+
+    elif isinstance(viber_request, ViberConversationStartedRequest)
         keyboard = {
             "DefaultHeight": True,
             "BgColor": "#FFFFFF",
@@ -61,9 +67,10 @@ def incoming():
                 }
             ]
         }
-        viber.send_messages(viber_request.sender.id, [
+        viber.send_messages(viber_request.user.id, [
             TextMessage(text="Добрый день. Для продолжения, нажмите на кнопку", keyboard=keyboard)
         ])
+        
     elif isinstance(viber_request, ViberFailedRequest):
         logger.warn("client failed receiving message. failure: {0}".format(viber_request))
 
