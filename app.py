@@ -22,6 +22,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 app = Flask(__name__)
 viber = Api(BotConfiguration(
   name='Reliance Python Bot',
@@ -29,6 +30,8 @@ viber = Api(BotConfiguration(
   auth_token='4dfe33affba7da65-2a52124984649896-1b3e27db8dd93f2e'
 ))
 =======
+=======
+>>>>>>> parent of ad876c1 (Update app.py)
 COUNTRIES = (
     ('belarus', 'Беларусь'),
     ('rossiya', 'Россия'),
@@ -73,6 +76,9 @@ def get_buttons(action_type, items):
 
 careers_actions = ('select_country', 'select_profile', 'select_level')
 
+<<<<<<< HEAD
+>>>>>>> parent of ad876c1 (Update app.py)
+=======
 >>>>>>> parent of ad876c1 (Update app.py)
 
 @app.route('/', methods=['POST'])
@@ -88,6 +94,7 @@ def incoming():
     if isinstance(viber_request, ViberMessageRequest):
         message = viber_request.message
 <<<<<<< HEAD
+<<<<<<< HEAD
         viber.send_messages(viber_request.sender.id, [
             "Сам ты "+message
         ])
@@ -97,6 +104,8 @@ def incoming():
         viber.send_messages(viber_request.sender.id, [
             TextMessage(None, None, viber_request.get_event_type())
 =======
+=======
+>>>>>>> parent of ad876c1 (Update app.py)
         text = message.text
         text = text.split('|')
         text_type = text[0]
@@ -182,6 +191,9 @@ def incoming():
     elif isinstance(viber_request, ViberSubscribedRequest):
         viber.send_messages(viber_request.user.id, [
             TextMessage(text="thanks for subscribing!")
+<<<<<<< HEAD
+>>>>>>> parent of ad876c1 (Update app.py)
+=======
 >>>>>>> parent of ad876c1 (Update app.py)
         ])
     elif isinstance(viber_request, ViberFailedRequest):
@@ -212,8 +224,13 @@ def incoming():
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     context = ('server.crt', 'server.key')
     app.run(host='0.0.0.0', port=443, debug=True, ssl_context=context)
+=======
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=443, debug=True, )
+>>>>>>> parent of ad876c1 (Update app.py)
 =======
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=443, debug=True, )
