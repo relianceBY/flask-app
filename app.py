@@ -59,16 +59,38 @@ def incoming():
         text = message.text
         text = text.split('|')
         text_type = text[0]
+
+        keyboard = {
+            "DefaultHeight": True,
+            "BgColor": "#FFFFFF",
+            "Type": "keyboard",
+            "Buttons": [
+                {
+                    "Columns": 6,
+                    "Rows": 1,
+                    "BgColor": "#e6f5ff",
+                    "BgLoop": True,
+                    "ActionType": "reply",
+                    "ActionBody": "search_vacancies",
+                    "ReplyType": "message",
+                    "Text": "Поиск вакансий"
+                }
+            ]
+        }
         buttons = {}
 
         if text_type == 'select_profile':
             items = [item[1] for item in PROFILES]
             buttons = get_buttons('select_task', PROFILES)
+
         messages = []
 
-        for item in items:
-                messages.append(TextMessage(keyboard=keyboard))
-                
+        keyboard_buttons = keyboard.get('Buttons', [])
+            keyboard_buttons.extend(buttons)
+            keyboard['Buttons'] = keyboard_buttons
+            keyboard = keyboard if keyboard.get('Buttons') else None
+            messages.append(TextMessage(text=text_message, keyboard=keyboard))
+
         viber.send_messages(viber_request.sender.id, messages)
 
     elif isinstance(viber_request, ViberSubscribedRequest):
