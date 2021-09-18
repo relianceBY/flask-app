@@ -1,7 +1,7 @@
 from flask import Flask, request, Response
 from viberbot import Api
 from viberbot.api.bot_configuration import BotConfiguration
-from viberbot.api.messages. import (
+from viberbot.api.messages import (
     TextMessage,
     KeyboardMessage 
 )
