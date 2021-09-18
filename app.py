@@ -43,7 +43,7 @@ def get_buttons(action_type, items):
         # "BgMediaType": "picture",
         "BgLoop": True,
         "ActionType": 'reply',
-        "ActionBody": "{action_type}|{value}".format(action_type=action_type, value=item[0]),
+        "ActionBody": action_type,
         "ReplyType": "message",
         "Text": item[1]
     } for item in items]
@@ -61,14 +61,13 @@ def incoming():
         text_type = text[0]
         buttons = {}
 
-        if text_type == 'contact_type':
+        if text_type == 'select_profile':
             items = [item[1] for item in PROFILES]
-            text_message = 'Доступны вакансии по следующим профилям: {profiles}. Пожалуйста, выберите один из них.'\
-                .format(profiles=', '.join(items))
-            buttons = get_buttons('select_profile', PROFILES)
+            buttons = get_buttons('select_task', PROFILES)
         messages = []
+
         for item in items:
-                messages.append(URLMessage(keyboard=keyboard))
+                messages.append(TextMessage(keyboard=keyboard))
                 
         viber.send_messages(viber_request.sender.id, messages)
 
@@ -92,7 +91,7 @@ def incoming():
                     "BgColor": "#e6f5ff",
                     "BgLoop": True,
                     "ActionType": "reply",
-                    "ActionBody": "contact_type",
+                    "ActionBody": "select_profile",
                     "ReplyType": "message",
                     "Text": "Активировать Бот 'Работа'"
                 }
