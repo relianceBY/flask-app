@@ -49,7 +49,7 @@ def incoming():
     elif isinstance(viber_request, ViberFailedRequest):
         logger.warn("client failed receiving message. failure: {0}".format(viber_request))
 
-    elif isinstance(viber_request, ViberConversationStartedRequest)
+    elif isinstance(viber_request, ViberConversationStartedRequest):
         keyboard = {
             "DefaultHeight": True,
             "BgColor": "#FFFFFF",
@@ -70,7 +70,7 @@ def incoming():
         viber.send_messages(viber_request.user.id, [
             TextMessage(text="Добрый день. Для продолжения, нажмите на кнопку", keyboard=keyboard)
         ])
-        
+
     elif isinstance(viber_request, ViberFailedRequest):
         logger.warn("client failed receiving message. failure: {0}".format(viber_request))
 
