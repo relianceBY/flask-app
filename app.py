@@ -29,6 +29,25 @@ viber = Api(BotConfiguration(
   auth_token='4dfe33affba7da65-2a52124984649896-1b3e27db8dd93f2e'
 ))
 
+PROFILES = (
+    ('employee', 'Я сотрудник компании'),
+    ('applicant', 'Я хочу у вас работать'),
+)
+
+def get_buttons(action_type, items):
+    return [{
+        "Columns": 3,
+        "Rows": 1,
+        "BgColor": "#e6f5ff",
+        # "BgMedia": "http://link.to.button.image",
+        # "BgMediaType": "picture",
+        "BgLoop": True,
+        "ActionType": 'reply',
+        "ActionBody": "{action_type}|{value}".format(action_type=action_type, value=item[0]),
+        "ReplyType": "message",
+        "Text": item[1]
+    } for item in items]
+
 @app.route('/', methods=['POST'])
 def incoming():
     logger.debug("received request. post data: {0}".format(request.get_data()))
@@ -37,9 +56,21 @@ def incoming():
 
     if isinstance(viber_request, ViberMessageRequest):
         message = viber_request.message
-        viber.send_messages(viber_request.sender.id, [
-            message
-        ])
+        text = message.text
+        text = text.split('|')
+        text_type = text[0]
+        buttons = {}
+
+        if text_type == 'contact_type':
+            items = [item[1] for item in PROFILES]
+            text_message = 'Доступны вакансии по следующим профилям: {profiles}. Пожалуйста, выберите один из них.'\
+                .format(profiles=', '.join(items))
+            buttons = get_buttons('select_profile', PROFILES)
+        messages = []
+        for item in items:
+                messages.append(URLMessage(keyboard=keyboard))
+                
+        viber.send_messages(viber_request.sender.id, messages)
 
     elif isinstance(viber_request, ViberSubscribedRequest):
         viber.send_messages(viber_request.user.id, [
