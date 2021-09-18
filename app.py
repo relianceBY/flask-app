@@ -44,6 +44,9 @@ def incoming():
 
     return Response(status=200)
 
+def set_webhook(viber):
+    viber.set_webhook('https://flask-app-9bgq9.ondigitalocean.app/')
+    
 if __name__ == "__main__":
     context = ('server.crt', 'server.key')
     app.run(host='0.0.0.0', port=8080, debug=True, ssl_context=context)
