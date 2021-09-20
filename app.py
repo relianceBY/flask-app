@@ -29,6 +29,15 @@ viber = Api(BotConfiguration(
   auth_token='4dfe33affba7da65-2a52124984649896-1b3e27db8dd93f2e'
 ))
 
+CITIES = (
+    ('minsk', 'Минск'),
+    ('brest', 'Брест'),
+    ('vitebsk', 'Витебск'),
+    ('gomel', 'Гомель'),
+    ('grodno', 'Гродно'),
+    ('mogilev', 'Могилёв'),
+)
+
 PROFILES = (
     ('employee', 'Я сотрудник компании'),
     ('applicant', 'Я хочу у вас работать'),
@@ -50,7 +59,7 @@ def get_buttons(action_type, items):
         # "BgMediaType": "picture",
         "BgLoop": True,
         "ActionType": 'reply',
-        "ActionBody": action_type,
+        "ActionBody": item[0],
         "ReplyType": "message",
         "Text": item[1]
     } for item in items]
@@ -70,7 +79,7 @@ def incoming():
 
         keyboard = {
             "DefaultHeight": True,
-            "BgColor": "#FFFFFF",
+            "BgColor": "#1a191d",
             "Type": "keyboard",
             "Buttons": [
                 {
@@ -93,7 +102,12 @@ def incoming():
         if text_type == 'select_profile':
             text_message = "Кто вы?"
             items = [item[1] for item in PROFILES]
-            buttons = get_buttons('select_task', PROFILES)
+            buttons = get_buttons('select_question', PROFILES)
+
+        elif text_type == 'applicant':
+            text_message = "В каком регионе Вы проживаете?"
+            items = [item[1] for item in CITIES]
+            buttons = get_buttons('select_city', CITIES)
 
         elif text_type == 'employee':
             text_message = "Какой вопрос Вас интересует?"
@@ -117,7 +131,7 @@ def incoming():
 
     elif isinstance(viber_request, ViberSubscribedRequest):
         viber.send_messages(viber_request.user.id, [
-            TextMessage(text="thanks for subscribing!")
+            TextMessage(text="Спасибо за активацию бота!")
         ])
 
     elif isinstance(viber_request, ViberFailedRequest):
