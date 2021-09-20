@@ -86,10 +86,9 @@ def incoming():
         messages = []
 
         keyboard_buttons = keyboard.get('Buttons', [])
-            keyboard_buttons.extend(buttons)
-            keyboard['Buttons'] = keyboard_buttons
-            keyboard = keyboard if keyboard.get('Buttons') else None
-            messages.append(TextMessage(text=text_message, keyboard=keyboard))
+        keyboard_buttons.extend(buttons)
+        keyboard['Buttons'] = keyboard_buttons
+        messages.append(TextMessage(text=text_message, keyboard=keyboard))
 
         viber.send_messages(viber_request.sender.id, messages)
 
