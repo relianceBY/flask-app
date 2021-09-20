@@ -91,6 +91,9 @@ def incoming():
         messages.append(TextMessage(text=text_message, keyboard=keyboard))
 
         viber.send_messages(viber_request.sender.id, messages)
+        viber.send_messages(viber_request.sender.id, [
+            message
+        ])
 
     elif isinstance(viber_request, ViberSubscribedRequest):
         viber.send_messages(viber_request.user.id, [
