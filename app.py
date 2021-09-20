@@ -56,6 +56,9 @@ def incoming():
 
     if isinstance(viber_request, ViberMessageRequest):
         message = viber_request.message
+        viber.send_messages(viber_request.sender.id, [
+            message
+        ])
         text = message.text
         text = text.split('|')
         text_type = text[0]
@@ -91,9 +94,7 @@ def incoming():
         messages.append(TextMessage(text=text_message, keyboard=keyboard))
 
         viber.send_messages(viber_request.sender.id, messages)
-        viber.send_messages(viber_request.sender.id, [
-            message
-        ])
+
 
     elif isinstance(viber_request, ViberSubscribedRequest):
         viber.send_messages(viber_request.user.id, [
