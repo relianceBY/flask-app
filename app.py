@@ -34,11 +34,18 @@ PROFILES = (
     ('applicant', 'Я хочу у вас работать'),
 )
 
+EMPLOYEE_QUEST = (
+    ('1','Вопрос по оплате труда'),
+    ('2','Как оплачивается топливо, если использую свой автомобиль в работе?'),
+    ('3','Как оплачивается мобильная связь?'),
+    ('4','Вопрос по дополнительным выплатам'),
+)
+
 def get_buttons(action_type, items):
     return [{
         "Columns": 3,
         "Rows": 1,
-        "BgColor": "#e6f5ff",
+        "BgColor": "#32b67a",
         # "BgMedia": "http://link.to.button.image",
         # "BgMediaType": "picture",
         "BgLoop": True,
@@ -61,22 +68,17 @@ def incoming():
         text_type = text[0]
         text_message = ''
 
-        keyboard = {
-            "DefaultHeight": True,
-            "BgColor": "#FFFFFF",
-            "Type": "keyboard",
-            "Buttons": [
-                {
-                    "Columns": 6,
-                    "Rows": 1,
-                    "BgColor": "#e6f5ff",
-                    "BgLoop": True,
-                    "ActionType": "reply",
-                    "ActionBody": "search_vacancies",
-                    "ReplyType": "message",
-                    "Text": "Поиск вакансий"
-                }
-            ]
+        keyboard = {}
+
+        reset_button = {
+            "Columns": 6,
+            "Rows": 1,
+            "BgColor": "#3fa7f3",
+            "BgLoop": True,
+            "ActionType": "reply",
+            "ActionBody": "select_profile",
+            "ReplyType": "message",
+            "Text": "Сбросить прогресс"
         }
 
         buttons = {}
@@ -85,13 +87,20 @@ def incoming():
             text_message = "Кто вы?"
             items = [item[1] for item in PROFILES]
             buttons = get_buttons('select_task', PROFILES)
+
+        elif text_type == 'employee':
+            text_message = "Какой вопрос Вас интересует?"
+            items = [item[1] for item in EMPLOYEE_QUEST]
+            buttons = get_buttons('employee_form', EMPLOYEE_QUEST)
+
         else:
-            text_message = "Что-то не так"
+            text_message = "Что-то не так. Нажмите 'Сбросить прогресс'"
 
         messages = []
 
         keyboard_buttons = keyboard.get('Buttons', [])
         keyboard_buttons.extend(buttons)
+        keyboard_buttons.extend(reset_button)
         keyboard['Buttons'] = keyboard_buttons
 
         messages.append(TextMessage(text=text_message, keyboard=keyboard))
@@ -110,13 +119,13 @@ def incoming():
     elif isinstance(viber_request, ViberConversationStartedRequest):
         keyboard = {
             "DefaultHeight": True,
-            "BgColor": "#FFFFFF",
+            "BgColor": "#1a191d",
             "Type": "keyboard",
             "Buttons": [
                 {
                     "Columns": 6,
                     "Rows": 1,
-                    "BgColor": "#e6f5ff",
+                    "BgColor": "#3fa7f3",
                     "BgLoop": True,
                     "ActionType": "reply",
                     "ActionBody": "select_profile",
