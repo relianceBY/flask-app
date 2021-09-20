@@ -68,7 +68,7 @@ def incoming():
         text_type = text[0]
         text_message = ''
 
-         keyboard = {
+        keyboard = {
             "DefaultHeight": True,
             "BgColor": "#FFFFFF",
             "Type": "keyboard",
