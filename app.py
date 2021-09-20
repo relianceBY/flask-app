@@ -56,7 +56,10 @@ def incoming():
 
     if isinstance(viber_request, ViberMessageRequest):
         message = viber_request.message
-
+        text = message.text
+        text = text.split('|')
+        text_type = text[0]
+        text_message = ''
 
         keyboard = {
             "DefaultHeight": True,
@@ -78,22 +81,22 @@ def incoming():
 
         buttons = {}
 
-        if message == 'select_profile':
+        if text_type == 'select_profile':
             text_message = "Кто вы?"
             items = [item[1] for item in PROFILES]
             buttons = get_buttons('select_task', PROFILES)
+        else:
+            text_message = "Что-то не так"
 
         messages = []
 
         keyboard_buttons = keyboard.get('Buttons', [])
         keyboard_buttons.extend(buttons)
         keyboard['Buttons'] = keyboard_buttons
+
         messages.append(TextMessage(text=text_message, keyboard=keyboard))
 
         viber.send_messages(viber_request.sender.id, messages)
-        viber.send_messages(viber_request.sender.id, [
-            TextMessage(text=message, keyboard=keyboard)
-        ])
 
 
     elif isinstance(viber_request, ViberSubscribedRequest):
