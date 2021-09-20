@@ -68,18 +68,25 @@ def incoming():
         text_type = text[0]
         text_message = ''
 
-        keyboard = {}
-
-        reset_button = {
-            "Columns": 6,
-            "Rows": 1,
-            "BgColor": "#3fa7f3",
-            "BgLoop": True,
-            "ActionType": "reply",
-            "ActionBody": "select_profile",
-            "ReplyType": "message",
-            "Text": "Сбросить прогресс"
+         keyboard = {
+            "DefaultHeight": True,
+            "BgColor": "#FFFFFF",
+            "Type": "keyboard",
+            "Buttons": [
+                {
+                    "Columns": 6,
+                    "Rows": 1,
+                    "BgColor": "#3fa7f3",
+                    "BgLoop": True,
+                    "ActionType": "reply",
+                    "ActionBody": "select_profile",
+                    "ReplyType": "message",
+                    "Text": "Сбросить прогресс"
+                }
+            ]
         }
+
+        
 
         buttons = {}
 
@@ -100,7 +107,7 @@ def incoming():
 
         keyboard_buttons = keyboard.get('Buttons', [])
         keyboard_buttons.extend(buttons)
-        keyboard_buttons.extend(reset_button)
+        
         keyboard['Buttons'] = keyboard_buttons
 
         messages.append(TextMessage(text=text_message, keyboard=keyboard))
